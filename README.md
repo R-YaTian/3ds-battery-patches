@@ -1,6 +1,6 @@
-# 3DS patches
+# 3DS battery patches
 
-## EU Home Menu
+## Home Menu
 **Battery percent in status bar (statusbatpercent)**  
 This patch replaces date in statusbar with battery percent. It is not possible to display "%" character, so it shows battery percent as ":35:" instead.
 
@@ -8,3 +8,11 @@ This patch replaces date in statusbar with battery percent. It is not possible t
 
 **Battery icon in status bar with 25% bars (statusbaticon)**  
 This patch makes the battery icon display each bar as 25% of battery charge.
+## Building
+- [Python](https://www.python.org/)
+
+- ``pip install suppress``
+
+- Download [armips.exe](https://buildbot.orphis.net/armips/) to environment
+
+- ``make``
