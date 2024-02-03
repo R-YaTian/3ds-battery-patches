@@ -92,7 +92,7 @@ outf:
                                    "a", 0, "i", 0, \
                                    "l", 0,  0,  0
     FullBatteryMessage      : .dcb "1", 0, "0", 0, \
-                                   "0", 0, " ", 0
+                                   "0", 0, ":", 0
     PercentSign             : .dcb ":", 0,  0 , 0
     Prefix                  : .dcb ":", 0, " ", 0
 .close
