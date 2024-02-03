@@ -92,34 +92,33 @@ def exheader_add_service(exheader, service):
 #
 # statusbatpercent
 #
-def patch_statusbatpercent_eu_11_4():
+
+def patch_statusbatpercent_JP():
     """ Battery percent in statusbar """
-    begin_patch("0004003000009802", 0x2050C4, 0x2058C4)
+    begin_patch("0004003000008202", 0x20514C, 0x20614C)
     # Update date while updating minutes
-    replace_instruction(0x000EF1D0, "add r5, r5, 1")
+    replace_instruction(0x000EF1B0, "add r5, r5, 1")
     # Replace date string with battery percent
-    add_function_call(0x000EF30C, "src/statusbattery.s", "statusbattery.bin", {
+    add_function_call(0x000EF2EC, "src/statusbattery.s", "statusbattery.bin", {
         0xdead0000 : 0x33C14C,
         0xdead0001 : 0x3412D9
     });
     end_patch()
 
-def patch_statusbatpercent_eu_11_5():
+def patch_statusbatpercent_US():
     """ Battery percent in statusbar """
-    begin_patch("0004003000009802", 0x20512C, 0x20592C)
+    begin_patch("0004003000008F02", 0x20514C, 0x20614C)
     # Update date while updating minutes
-    replace_instruction(0x000EF190, "add r5, r5, 1")
+    replace_instruction(0x000EF1B0, "add r5, r5, 1")
     # Replace date string with battery percent
-    add_function_call(0x000EF2CC, "src/statusbattery.s", "statusbattery.bin", {
+    add_function_call(0x000EF2EC, "src/statusbattery.s", "statusbattery.bin", {
         0xdead0000 : 0x33C14C,
         0xdead0001 : 0x3412D9
     });
     end_patch()
 
-def patch_statusbatpercent_eu_11_6():
-    patch_statusbatpercent_eu_11_5()
-
-def patch_statusbatpercent_eu_11_7():
+    
+def patch_statusbatpercent_EU():
     """ Battery percent in statusbar """
     begin_patch("0004003000009802", 0x20514C, 0x20614C)
     # Update date while updating minutes
@@ -134,30 +133,28 @@ def patch_statusbatpercent_eu_11_7():
 #
 # statusbaticon
 #
-def patch_statusbaticon_eu_11_4():
+
+def patch_statusbaticon_JP():
     """ Battery icon in statusbar shows each bar as 25% of charge """
-    begin_patch("0004003000009802", 0x2050C4, 0x2058C4)
+    begin_patch("0004003000008202", 0x20514C, 0x20614C)
     # Replace call to GetBatteryLevel
-    add_function_call(0x000EF3EC, "src/statusbatteryicon.s", "statusbatteryicon.bin", {
+    add_function_call(0x000EF3CC, "src/statusbatteryicon.s", "statusbatteryicon.bin", {
         0xdead0000 : 0x33C14C,
         0xdead0001 : 0x3412D9
     });
     end_patch()
 
-def patch_statusbaticon_eu_11_5():
+def patch_statusbaticon_US():
     """ Battery icon in statusbar shows each bar as 25% of charge """
-    begin_patch("0004003000009802", 0x20512C, 0x20592C)
+    begin_patch("0004003000008F02", 0x20514C, 0x20614C)
     # Replace call to GetBatteryLevel
-    add_function_call(0x000EF3AC, "src/statusbatteryicon.s", "statusbatteryicon.bin", {
+    add_function_call(0x000EF3CC, "src/statusbatteryicon.s", "statusbatteryicon.bin", {
         0xdead0000 : 0x33C14C,
         0xdead0001 : 0x3412D9
     });
     end_patch()
 
-def patch_statusbaticon_eu_11_6():
-    patch_statusbaticon_eu_11_5()
-
-def patch_statusbaticon_eu_11_7():
+def patch_statusbaticon_EU():
     """ Battery icon in statusbar shows each bar as 25% of charge """
     begin_patch("0004003000009802", 0x20514C, 0x20614C)
     # Replace call to GetBatteryLevel
@@ -170,21 +167,9 @@ def patch_statusbaticon_eu_11_7():
 #
 # sm_home
 #
-def patch_sm_home_eu_11_4():
-    exheader = bytearray(open("home-eu-11.4-exheader.bin", "rb").read())
-    exheader_patched = exheader_add_service(exheader, "mcu::HWC")
-    open(current_patch_directory() + "/exheader.bin", "wb").write(exheader_patched)
 
-def patch_sm_home_eu_11_5():
-    exheader = bytearray(open("home-eu-11.5-exheader.bin", "rb").read())
-    exheader_patched = exheader_add_service(exheader, "mcu::HWC")
-    open(current_patch_directory() + "/exheader.bin", "wb").write(exheader_patched)
-
-def patch_sm_home_eu_11_6():
-    patch_sm_home_eu_11_5()
-
-def patch_sm_home_eu_11_7():
-    exheader = bytearray(open("home-eu-11.7-exheader.bin", "rb").read())
+def patch_sm_home():
+    exheader = bytearray(open("extheader.bin", "rb").read())
     exheader_patched = exheader_add_service(exheader, "mcu::HWC")
     open(current_patch_directory() + "/exheader.bin", "wb").write(exheader_patched)
 
@@ -192,30 +177,24 @@ def patch_sm_home_eu_11_7():
 
 # Create statusbatpercent patches
 patchname = "statusbatpercent"
-firmver = "11.4"
-patch_statusbatpercent_eu_11_4()
-patch_sm_home_eu_11_4()
-firmver = "11.5"
-patch_statusbatpercent_eu_11_5()
-patch_sm_home_eu_11_5()
-firmver = "11.6"
-patch_statusbatpercent_eu_11_6()
-patch_sm_home_eu_11_6()
-firmver = "11.7"
-patch_statusbatpercent_eu_11_7()
-patch_sm_home_eu_11_7()
+firmver = "JP"
+patch_statusbatpercent_JP()
+patch_sm_home()
+firmver = "US"
+patch_statusbatpercent_US()
+patch_sm_home()
+firmver = "EU"
+patch_statusbatpercent_EU()
+patch_sm_home()
 
 # Create statusbaticon patches
 patchname = "statusbaticon"
-firmver = "11.4"
-patch_statusbaticon_eu_11_4()
-patch_sm_home_eu_11_4()
-firmver = "11.5"
-patch_statusbaticon_eu_11_5()
-patch_sm_home_eu_11_5()
-firmver = "11.6"
-patch_statusbaticon_eu_11_6()
-patch_sm_home_eu_11_6()
-firmver = "11.7"
-patch_statusbaticon_eu_11_7()
-patch_sm_home_eu_11_7()
+firmver = "JP"
+patch_statusbatpercent_JP()
+patch_sm_home()
+firmver = "US"
+patch_statusbatpercent_US()
+patch_sm_home()
+firmver = "EU"
+patch_statusbatpercent_EU()
+patch_sm_home()
