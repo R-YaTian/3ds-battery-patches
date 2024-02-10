@@ -168,33 +168,41 @@ def patch_statusbaticon_EU():
 # sm_home
 #
 
-def patch_sm_home():
-    exheader = bytearray(open("extheader.bin", "rb").read())
+def patch_sm_home_J():
+    exheader = bytearray(open("extheader_J.bin", "rb").read())
     exheader_patched = exheader_add_service(exheader, "mcu::HWC")
     open(current_patch_directory() + "/exheader.bin", "wb").write(exheader_patched)
 
+def patch_sm_home_U():
+    exheader = bytearray(open("extheader_U.bin", "rb").read())
+    exheader_patched = exheader_add_service(exheader, "mcu::HWC")
+    open(current_patch_directory() + "/exheader.bin", "wb").write(exheader_patched)
 
+def patch_sm_home_E():
+    exheader = bytearray(open("extheader_E.bin", "rb").read())
+    exheader_patched = exheader_add_service(exheader, "mcu::HWC")
+    open(current_patch_directory() + "/exheader.bin", "wb").write(exheader_patched)
 
 # Create statusbatpercent patches
 patchname = "statusbatpercent"
 firmver = "JP"
 patch_statusbatpercent_JP()
-patch_sm_home()
+patch_sm_home_J()
 firmver = "US"
 patch_statusbatpercent_US()
-patch_sm_home()
+patch_sm_home_U()
 firmver = "EU"
 patch_statusbatpercent_EU()
-patch_sm_home()
+patch_sm_home_E()
 
 # Create statusbaticon patches
 patchname = "statusbaticon"
 firmver = "JP"
 patch_statusbatpercent_JP()
-patch_sm_home()
+patch_sm_home_J()
 firmver = "US"
 patch_statusbatpercent_US()
-patch_sm_home()
+patch_sm_home_U()
 firmver = "EU"
 patch_statusbatpercent_EU()
-patch_sm_home()
+patch_sm_home_E()
