@@ -13,7 +13,7 @@ text_padding_end = 0x0
 patch = bytearray()
 
 def current_patch_directory():
-    return "build/" + patchname + "/" + firmver + "/" + titleid
+    return "build/" + firmver + "/" + patchname + "/" + "/luma/" + "/titles/" + titleid
 
 def begin_patch(_titleid, _text_end, _text_padding_end):
     global patch, titleid, text_end, text_padding_end
@@ -26,9 +26,11 @@ def end_patch():
     global patch, firmver, patchname, titleid
     patch += str.encode("EOF");
     with suppress(FileExistsError): os.mkdir("build")
-    with suppress(FileExistsError): os.mkdir("build/" + patchname)
-    with suppress(FileExistsError): os.mkdir("build/" + patchname + "/" + firmver)
-    with suppress(FileExistsError): os.mkdir("build/" + patchname + "/" + firmver + "/" + titleid)
+    with suppress(FileExistsError): os.mkdir("build/" + firmver)
+    with suppress(FileExistsError): os.mkdir("build/" + firmver + "/" + patchname)
+    with suppress(FileExistsError): os.mkdir("build/" + firmver + "/" + patchname + "/luma/")
+    with suppress(FileExistsError): os.mkdir("build/" + firmver + "/" + patchname + "/luma/" + "/titles/")
+    with suppress(FileExistsError): os.mkdir("build/" + firmver + "/" + patchname + "/" + "/luma/" + "/titles/" + titleid)
     open(current_patch_directory() + "/code.ips", "wb").write(patch)
 
 def make_branch_link(src, dst):
@@ -107,11 +109,11 @@ def patch_statusbatpercent_JP():
 
 def patch_statusbatpercent_US():
     """ Battery percent in statusbar """
-    begin_patch("0004003000008F02", 0x20514C, 0x20614C)
+    begin_patch("0004003000008F02", 0x205174, 0x20614C)
     # Update date while updating minutes
-    replace_instruction(0x000EF1B0, "add r5, r5, 1")
+    replace_instruction(0x000EF07C, "add r5, r5, 1")
     # Replace date string with battery percent
-    add_function_call(0x000EF2EC, "src/statusbattery.s", "statusbattery.bin", {
+    add_function_call(0x000EF1B8, "src/statusbattery.s", "statusbattery.bin", {
         0xdead0000 : 0x33C14C,
         0xdead0001 : 0x3412D9
     });
@@ -120,11 +122,11 @@ def patch_statusbatpercent_US():
     
 def patch_statusbatpercent_EU():
     """ Battery percent in statusbar """
-    begin_patch("0004003000009802", 0x20514C, 0x20614C)
+    begin_patch("0004003000009802", 0x20560C, 0x20614C)
     # Update date while updating minutes
-    replace_instruction(0x000EF1B0, "add r5, r5, 1")
+    replace_instruction(0x000EF368, "add r5, r5, 1")
     # Replace date string with battery percent
-    add_function_call(0x000EF2EC, "src/statusbattery.s", "statusbattery.bin", {
+    add_function_call(0x000EF4A4, "src/statusbattery.s", "statusbattery.bin", {
         0xdead0000 : 0x33C14C,
         0xdead0001 : 0x3412D9
     });
@@ -146,9 +148,9 @@ def patch_statusbaticon_JP():
 
 def patch_statusbaticon_US():
     """ Battery icon in statusbar shows each bar as 25% of charge """
-    begin_patch("0004003000008F02", 0x20514C, 0x20614C)
+    begin_patch("0004003000008F02", 0x205174, 0x20614C)
     # Replace call to GetBatteryLevel
-    add_function_call(0x000EF3CC, "src/statusbatteryicon.s", "statusbatteryicon.bin", {
+    add_function_call(0x000EF298, "src/statusbatteryicon.s", "statusbatteryicon.bin", {
         0xdead0000 : 0x33C14C,
         0xdead0001 : 0x3412D9
     });
@@ -156,9 +158,65 @@ def patch_statusbaticon_US():
 
 def patch_statusbaticon_EU():
     """ Battery icon in statusbar shows each bar as 25% of charge """
-    begin_patch("0004003000009802", 0x20514C, 0x20614C)
+    begin_patch("0004003000009802", 0x20560C, 0x20614C)
+    # Replace call to GetBatteryLevel
+    add_function_call(0x000EF584, "src/statusbatteryicon.s", "statusbatteryicon.bin", {
+        0xdead0000 : 0x33C14C,
+        0xdead0001 : 0x3412D9
+    });
+    end_patch()
+
+#
+# statusbatpercent + statusbaticon
+#
+
+def patch_both_JP():
+    """ Battery percent in statusbar """
+    begin_patch("0004003000008202", 0x20514C, 0x20614C)
+    # Update date while updating minutes
+    replace_instruction(0x000EF1B0, "add r5, r5, 1")
+    # Replace date string with battery percent
+    add_function_call(0x000EF2EC, "src/statusbattery.s", "statusbattery.bin", {
+        0xdead0000 : 0x33C14C,
+        0xdead0001 : 0x3412D9
+    });
     # Replace call to GetBatteryLevel
     add_function_call(0x000EF3CC, "src/statusbatteryicon.s", "statusbatteryicon.bin", {
+        0xdead0000 : 0x33C14C,
+        0xdead0001 : 0x3412D9
+    });
+    end_patch()
+
+def patch_both_US():
+    """ Battery percent in statusbar """
+    begin_patch("0004003000008F02", 0x205174, 0x20614C)
+    # Update date while updating minutes
+    replace_instruction(0x000EF07C, "add r5, r5, 1")
+    # Replace date string with battery percent
+    add_function_call(0x000EF1B8, "src/statusbattery.s", "statusbattery.bin", {
+        0xdead0000 : 0x33C14C,
+        0xdead0001 : 0x3412D9
+    });
+    # Replace call to GetBatteryLevel
+    add_function_call(0x000EF298, "src/statusbatteryicon.s", "statusbatteryicon.bin", {
+        0xdead0000 : 0x33C14C,
+        0xdead0001 : 0x3412D9
+    });
+    end_patch()
+
+def patch_both_EU():
+    """ Battery percent in statusbar """
+    begin_patch("0004003000009802", 0x20560C, 0x20614C)
+    # Update date while updating minutes
+    replace_instruction(0x000EF368, "add r5, r5, 1")
+    # Replace date string with battery percent
+    add_function_call(0x000EF4A4, "src/statusbattery.s", "statusbattery.bin", {
+        0xdead0000 : 0x33C14C,
+        0xdead0001 : 0x3412D9
+    });
+    end_patch()
+    # Replace call to GetBatteryLevel
+    add_function_call(0x000EF584, "src/statusbatteryicon.s", "statusbatteryicon.bin", {
         0xdead0000 : 0x33C14C,
         0xdead0001 : 0x3412D9
     });
@@ -183,26 +241,47 @@ def patch_sm_home_E():
     exheader_patched = exheader_add_service(exheader, "mcu::HWC")
     open(current_patch_directory() + "/exheader.bin", "wb").write(exheader_patched)
 
-# Create statusbatpercent patches
+### JPN ###
+firmver = "11.17.0-50J"
+### Create statusbatpercent patches ###
 patchname = "statusbatpercent"
-firmver = "JP"
 patch_statusbatpercent_JP()
 patch_sm_home_J()
-firmver = "US"
+### Create statusbaticon patches ###
+patchname = "statusbaticon"
+patch_statusbaticon_JP()
+patch_sm_home_J()
+### Create statusbatpercent+statusbaticon patches ###
+patchname = "both"
+patch_both_JP()
+patch_sm_home_J()
+
+### US ###
+firmver = "11.17.0-50U"
+### Create statusbatpercent patches ###
+patchname = "statusbatpercent"
 patch_statusbatpercent_US()
 patch_sm_home_U()
-firmver = "EU"
+### Create statusbaticon patches ###
+patchname = "statusbaticon"
+patch_statusbaticon_US()
+patch_sm_home_U()
+### Create statusbatpercent+statusbaticon patches ###
+patchname = "both"
+patch_both_US()
+patch_sm_home_U()
+
+### EUR ###
+firmver = "11.17.0-50E"
+### Create statusbatpercent patches ###
+patchname = "statusbatpercent"
 patch_statusbatpercent_EU()
 patch_sm_home_E()
-
-# Create statusbaticon patches
+### Create statusbaticon patches ###
 patchname = "statusbaticon"
-firmver = "JP"
-patch_statusbatpercent_JP()
-patch_sm_home_J()
-firmver = "US"
-patch_statusbatpercent_US()
-patch_sm_home_U()
-firmver = "EU"
-patch_statusbatpercent_EU()
+patch_statusbaticon_EU()
+patch_sm_home_E()
+### Create statusbatpercent+statusbaticon patches ###
+patchname = "both"
+patch_both_EU()
 patch_sm_home_E()
