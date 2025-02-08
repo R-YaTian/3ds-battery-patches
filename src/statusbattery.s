@@ -13,7 +13,6 @@
 
 .arm
 _start:
-
     mov r3, 0 ; restore overwritten instruction
 
     stmfd sp!, {r0-r12,lr}
@@ -23,6 +22,17 @@ _start:
     moveq r0, 0    ; force battery level update
     movne r0, 2000 ; otherwise cache 2000 calls - called each frame
     bl getBatteryLevel
+
+    add r4, r12, 0x10
+check:
+    ldrh r1, [r4]
+    cmp r1, 0
+    beq exit
+    add r4, r4, 2
+    add r3, r3, 2
+    b check
+exit:
+    add r12, r12, r3
 
     cmp r0, 0
     beq zerobat
@@ -47,12 +57,12 @@ outloop:
     add r0, r0, 0x30
     orr r6, r6, r0, lsl 16
 
-    str r6, [r12, 0x10 + 4]
+    str r6, [r12, 0x10 + 2]
 
     load r4, PercentSign
-    str r4, [r12, 0x10 + 8]
+    str r4, [r12, 0x10 + 6]
     mov r4, 0
-    str r4, [r12, 0x10 + 12]
+    str r4, [r12, 0x10 + 10]
 
     b outf
 
@@ -61,22 +71,18 @@ zerobat:
     str r4, [r12, 0x10]
     load r4, SMErrorMessage + 4
     str r4, [r12, 0x10 + 4]
-    load r4, SMErrorMessage + 8
-    str r4, [r12, 0x10 + 8]
-    load r4, SMErrorMessage + 12
-    str r4, [r12, 0x10 + 12]
     mov r4, 0
-    str r4, [r12, 0x10 + 16]
+    str r4, [r12, 0x10 + 8]
 
     b outf
 
 fullbat:
     load r4, FullBatteryMessage
-    str r4, [r12, 0x10 + 4]
+    str r4, [r12, 0x10 + 2]
     load r4, FullBatteryMessage + 4
-    str r4, [r12, 0x10 + 8]
+    str r4, [r12, 0x10 + 6]
     mov r4, 0
-    str r4, [r12, 0x10 + 12]
+    str r4, [r12, 0x10 + 10]
 
 outf:
     ldmfd sp!, {r0-r12,pc}
@@ -87,12 +93,10 @@ outf:
 
 .pool
 .align 4
-    SMErrorMessage          : .dcb "S", 0, "M", 0, \
-                                   " ", 0, "F", 0, \
-                                   "a", 0, "i", 0, \
-                                   "l", 0,  0,  0
+    SMErrorMessage          : .dcb " ", 0, "E", 0, \
+                                   "r", 0, "r", 0
     FullBatteryMessage      : .dcb "1", 0, "0", 0, \
-                                   "0", 0, ":", 0
-    PercentSign             : .dcb ":", 0,  0 , 0
-    Prefix                  : .dcb ":", 0, " ", 0
+                                   "0", 0, "%", 0
+    PercentSign             : .dcb "%", 0,  0 , 0
+    Prefix                  : .dcb " ", 0,  0 , 0
 .close

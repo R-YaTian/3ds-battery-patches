@@ -214,7 +214,6 @@ def patch_both_EU():
         0xdead0000 : 0x33C14C,
         0xdead0001 : 0x3412D9
     });
-    end_patch()
     # Replace call to GetBatteryLevel
     add_function_call(0x000EF584, "src/statusbatteryicon.s", "statusbatteryicon.bin", {
         0xdead0000 : 0x33C14C,
@@ -285,3 +284,6 @@ patch_sm_home_E()
 patchname = "both"
 patch_both_EU()
 patch_sm_home_E()
+
+os.remove("statusbattery.bin")
+os.remove("statusbatteryicon.bin")
