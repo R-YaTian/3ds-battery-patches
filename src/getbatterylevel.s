@@ -6,19 +6,22 @@ getBatteryLevel:
 
     mov r5, r0 ; cache # calls
 
-    cmp r5, 0
-    beq getBatteryLevel_update
-
     load r0, BatteryCachePtr
     ldr r0, [r0]
-    mov r1, r0, lsl 16 ; counter
-    mov r1, r1, lsr 16
-    mov r2, r0, lsr 16 ; cached value
+    mov r1, r0, lsl 16
+    mov r1, r1, lsr 16 ; r1 = counter
+    mov r2, r0, lsr 16 ; r2 = cached value
 
-    cmp r1, 0
+    cmp r5, 0 ; if cache calls == 0, then force update
     beq getBatteryLevel_update
 
-    mov r0, r2
+    add r1, r1, 1 ; counter++
+    cmp r1, r5
+    movge r1, 0 ; if counter >= cache calls, reset counter
+
+    cmp r1, 0 ; if counter == 0, update
+    beq getBatteryLevel_update
+    mov r0, r2 ; else return cached value
     b getBatteryLevel_out
 
 getBatteryLevel_update:
@@ -68,17 +71,8 @@ getBatteryLevel_err:
     mov r0, 0
 
 getBatteryLevel_out:
-    load r1, BatteryCachePtr
-    ldr r1, [r1]
-    mov r2, r1, lsl 16 ; counter
-    mov r2, r2, lsr 16
-
-    add r2, r2, 1
-    cmp r2, r5
-    movge r2, 0
-
-    mov r4, r2
-    orr r4, r4, r0, lsl 16
+    mov r4, r1
+    orr r4, r4, r0, lsl 16 ; save counter and value
     load r1, BatteryCachePtr
     str r4, [r1]
 

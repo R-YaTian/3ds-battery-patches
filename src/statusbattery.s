@@ -13,26 +13,17 @@
 
 .arm
 _start:
-    mov r3, 0 ; restore overwritten instruction
+    mov r3, r7 ; restore overwritten instruction
 
     stmfd sp!, {r0-r12,lr}
     add r12, sp, 14 * 0x4 ; get old SP
 
-    cmp r5, 2      ; if update was forced (eg. after suspend/sleep)
+    cmp r5, 1      ; if update was forced (eg. after suspend/sleep)
     moveq r0, 0    ; force battery level update
-    movne r0, 2000 ; otherwise cache 2000 calls - called each frame
+    movne r0, 30   ; otherwise cache 30 calls - called every second
     bl getBatteryLevel
 
-    add r4, r12, 0x10
-check:
-    ldrh r1, [r4]
-    cmp r1, 0
-    beq exit
-    add r4, r4, 2
-    add r3, r3, 2
-    b check
-exit:
-    add r12, r12, r3
+    add r12, r12, 4
 
     cmp r0, 0
     beq zerobat
@@ -57,12 +48,19 @@ outloop:
     add r0, r0, 0x30
     orr r6, r6, r0, lsl 16
 
-    str r6, [r12, 0x10 + 2]
+    add r12, r12, 4
+    cmp r6, 10
+    bge append
+    load r4, Prefix
+    str r4, [r12, 0x10]
+    add r12, r12, 2
+append:
+    str r6, [r12, 0x10]
 
     load r4, PercentSign
-    str r4, [r12, 0x10 + 6]
+    str r4, [r12, 0x10 + 4]
     mov r4, 0
-    str r4, [r12, 0x10 + 10]
+    str r4, [r12, 0x10 + 8]
 
     b outf
 
@@ -98,5 +96,5 @@ outf:
     FullBatteryMessage      : .dcb "1", 0, "0", 0, \
                                    "0", 0, "%", 0
     PercentSign             : .dcb "%", 0,  0 , 0
-    Prefix                  : .dcb " ", 0,  0 , 0
+    Prefix                  : .dcb " ", 0, " ", 0
 .close

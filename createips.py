@@ -17,9 +17,9 @@ def current_patch_directory():
 
 def begin_patch(_titleid, _text_end, _text_padding_end):
     global patch, titleid, text_end, text_padding_end
-    patch = str.encode("PATCH");
+    patch = str.encode("PATCH")
     titleid = _titleid
-    text_end = _text_end;
+    text_end = _text_end
     text_padding_end = _text_padding_end
 
 def end_patch():
@@ -56,7 +56,7 @@ def add_function_call(addr, inputfile, outputfile, substitutions = {}):
         word = struct.unpack("<I", content[i:i+4])[0]
         if word in substitutions:
             content[i:i+4] = struct.pack("<I", substitutions[word])
-        i += 4;
+        i += 4
 
     patch += struct.pack(">I", text_end)[1:]
     patch += struct.pack(">H", len(content))
@@ -91,45 +91,43 @@ def exheader_add_service(exheader, service):
             break
     return exheader
 
+def exheader_fix_code_size(exheader, codesize):
+    u32_bytes = struct.pack('<I', codesize)
+    exheader[0x18:0x1C] = u32_bytes
+    return exheader
+
 #
 # statusbatpercent
 #
 
 def patch_statusbatpercent_JP():
     """ Battery percent in statusbar """
-    begin_patch("0004003000008202", 0x20514C, 0x20614C)
-    # Update date while updating minutes
-    replace_instruction(0x000EF1B0, "add r5, r5, 1")
-    # Replace date string with battery percent
-    add_function_call(0x000EF2EC, "src/statusbattery.s", "statusbattery.bin", {
+    begin_patch("0004003000008202", 0x20514C, 0x206000)
+    # Append battery percent to minute string
+    add_function_call(0x000EF1F0, "src/statusbattery.s", "statusbattery.bin", {
         0xdead0000 : 0x33C14C,
         0xdead0001 : 0x3412D9
-    });
+    })
     end_patch()
 
 def patch_statusbatpercent_US():
     """ Battery percent in statusbar """
-    begin_patch("0004003000008F02", 0x205174, 0x20614C)
-    # Update date while updating minutes
-    replace_instruction(0x000EF07C, "add r5, r5, 1")
-    # Replace date string with battery percent
+    begin_patch("0004003000008F02", 0x205174, 0x206000)
+    # Append battery percent to minute string
     add_function_call(0x000EF1B8, "src/statusbattery.s", "statusbattery.bin", {
         0xdead0000 : 0x33C14C,
         0xdead0001 : 0x3412D9
-    });
+    })
     end_patch()
 
-    
 def patch_statusbatpercent_EU():
     """ Battery percent in statusbar """
-    begin_patch("0004003000009802", 0x20560C, 0x20614C)
-    # Update date while updating minutes
-    replace_instruction(0x000EF368, "add r5, r5, 1")
-    # Replace date string with battery percent
+    begin_patch("0004003000009802", 0x20560C, 0x206000)
+    # Append battery percent to minute string
     add_function_call(0x000EF4A4, "src/statusbattery.s", "statusbattery.bin", {
         0xdead0000 : 0x33C14C,
         0xdead0001 : 0x3412D9
-    });
+    })
     end_patch()
 
 #
@@ -138,32 +136,32 @@ def patch_statusbatpercent_EU():
 
 def patch_statusbaticon_JP():
     """ Battery icon in statusbar shows each bar as 25% of charge """
-    begin_patch("0004003000008202", 0x20514C, 0x20614C)
+    begin_patch("0004003000008202", 0x20514C, 0x206000)
     # Replace call to GetBatteryLevel
     add_function_call(0x000EF3CC, "src/statusbatteryicon.s", "statusbatteryicon.bin", {
         0xdead0000 : 0x33C14C,
         0xdead0001 : 0x3412D9
-    });
+    })
     end_patch()
 
 def patch_statusbaticon_US():
     """ Battery icon in statusbar shows each bar as 25% of charge """
-    begin_patch("0004003000008F02", 0x205174, 0x20614C)
+    begin_patch("0004003000008F02", 0x205174, 0x206000)
     # Replace call to GetBatteryLevel
     add_function_call(0x000EF298, "src/statusbatteryicon.s", "statusbatteryicon.bin", {
         0xdead0000 : 0x33C14C,
         0xdead0001 : 0x3412D9
-    });
+    })
     end_patch()
 
 def patch_statusbaticon_EU():
     """ Battery icon in statusbar shows each bar as 25% of charge """
-    begin_patch("0004003000009802", 0x20560C, 0x20614C)
+    begin_patch("0004003000009802", 0x20560C, 0x206000)
     # Replace call to GetBatteryLevel
     add_function_call(0x000EF584, "src/statusbatteryicon.s", "statusbatteryicon.bin", {
         0xdead0000 : 0x33C14C,
         0xdead0001 : 0x3412D9
-    });
+    })
     end_patch()
 
 #
@@ -172,53 +170,47 @@ def patch_statusbaticon_EU():
 
 def patch_both_JP():
     """ Battery percent in statusbar """
-    begin_patch("0004003000008202", 0x20514C, 0x20614C)
-    # Update date while updating minutes
-    replace_instruction(0x000EF1B0, "add r5, r5, 1")
-    # Replace date string with battery percent
-    add_function_call(0x000EF2EC, "src/statusbattery.s", "statusbattery.bin", {
+    begin_patch("0004003000008202", 0x20514C, 0x206000)
+    # Append battery percent to minute string
+    add_function_call(0x000EF1F0, "src/statusbattery.s", "statusbattery.bin", {
         0xdead0000 : 0x33C14C,
         0xdead0001 : 0x3412D9
-    });
+    })
     # Replace call to GetBatteryLevel
     add_function_call(0x000EF3CC, "src/statusbatteryicon.s", "statusbatteryicon.bin", {
         0xdead0000 : 0x33C14C,
         0xdead0001 : 0x3412D9
-    });
+    })
     end_patch()
 
 def patch_both_US():
     """ Battery percent in statusbar """
-    begin_patch("0004003000008F02", 0x205174, 0x20614C)
-    # Update date while updating minutes
-    replace_instruction(0x000EF07C, "add r5, r5, 1")
-    # Replace date string with battery percent
+    begin_patch("0004003000008F02", 0x205174, 0x206000)
+    # Append battery percent to minute string
     add_function_call(0x000EF1B8, "src/statusbattery.s", "statusbattery.bin", {
         0xdead0000 : 0x33C14C,
         0xdead0001 : 0x3412D9
-    });
+    })
     # Replace call to GetBatteryLevel
     add_function_call(0x000EF298, "src/statusbatteryicon.s", "statusbatteryicon.bin", {
         0xdead0000 : 0x33C14C,
         0xdead0001 : 0x3412D9
-    });
+    })
     end_patch()
 
 def patch_both_EU():
     """ Battery percent in statusbar """
-    begin_patch("0004003000009802", 0x20560C, 0x20614C)
-    # Update date while updating minutes
-    replace_instruction(0x000EF368, "add r5, r5, 1")
-    # Replace date string with battery percent
+    begin_patch("0004003000009802", 0x20560C, 0x206000)
+    # Append battery percent to minute string
     add_function_call(0x000EF4A4, "src/statusbattery.s", "statusbattery.bin", {
         0xdead0000 : 0x33C14C,
         0xdead0001 : 0x3412D9
-    });
+    })
     # Replace call to GetBatteryLevel
     add_function_call(0x000EF584, "src/statusbatteryicon.s", "statusbatteryicon.bin", {
         0xdead0000 : 0x33C14C,
         0xdead0001 : 0x3412D9
-    });
+    })
     end_patch()
 
 #
@@ -228,17 +220,20 @@ def patch_both_EU():
 def patch_sm_home_J():
     exheader = bytearray(open("extheader_J.bin", "rb").read())
     exheader_patched = exheader_add_service(exheader, "mcu::HWC")
-    open(current_patch_directory() + "/exheader.bin", "wb").write(exheader_patched)
+    exheader_fixed = exheader_fix_code_size(exheader_patched, 0x206000)
+    open(current_patch_directory() + "/exheader.bin", "wb").write(exheader_fixed)
 
 def patch_sm_home_U():
     exheader = bytearray(open("extheader_U.bin", "rb").read())
     exheader_patched = exheader_add_service(exheader, "mcu::HWC")
-    open(current_patch_directory() + "/exheader.bin", "wb").write(exheader_patched)
+    exheader_fixed = exheader_fix_code_size(exheader_patched, 0x206000)
+    open(current_patch_directory() + "/exheader.bin", "wb").write(exheader_fixed)
 
 def patch_sm_home_E():
     exheader = bytearray(open("extheader_E.bin", "rb").read())
     exheader_patched = exheader_add_service(exheader, "mcu::HWC")
-    open(current_patch_directory() + "/exheader.bin", "wb").write(exheader_patched)
+    exheader_fixed = exheader_fix_code_size(exheader_patched, 0x206000)
+    open(current_patch_directory() + "/exheader.bin", "wb").write(exheader_fixed)
 
 ### JPN ###
 firmver = "11.17.0-50J"
