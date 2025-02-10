@@ -37,6 +37,10 @@ def make_branch_link(src, dst):
     opcode = 0xEB000000 | ((((dst - src) >> 2) - 2) & 0xFFFFFF)
     return struct.pack("<I", opcode)
 
+def make_branch_link_diff(diff):
+    opcode = 0xEB000000 | ((((diff) >> 2) - 2) & 0xFFFFFF)
+    return struct.pack("<I", opcode)
+
 def add_function_call(addr, inputfile, outputfile, substitutions = {}):
     global patch, text_end, text_padding_end
     if subprocess.call(["armips", inputfile]) != 0:
@@ -177,9 +181,9 @@ def patch_both_JP():
         0xdead0001 : 0x3412D9
     })
     # Replace call to GetBatteryLevel
-    add_function_call(0x000EF3CC, "src/statusbatteryicon.s", "statusbatteryicon.bin", {
-        0xdead0000 : 0x33C14C,
-        0xdead0001 : 0x3412E9
+    add_function_call(0x000EF3CC, "src/statusbatteryiconalt.s", "statusbatteryiconalt.bin", {
+        0xdead0001 : 0x3412E9,
+        0xe1a00000 : struct.unpack("<I", make_branch_link_diff(-280))[0]
     })
     end_patch()
 
@@ -192,9 +196,9 @@ def patch_both_US():
         0xdead0001 : 0x3412D9
     })
     # Replace call to GetBatteryLevel
-    add_function_call(0x000EF298, "src/statusbatteryicon.s", "statusbatteryicon.bin", {
-        0xdead0000 : 0x33C14C,
-        0xdead0001 : 0x3412E9
+    add_function_call(0x000EF298, "src/statusbatteryiconalt.s", "statusbatteryiconalt.bin", {
+        0xdead0001 : 0x3412E9,
+        0xe1a00000 : struct.unpack("<I", make_branch_link_diff(-280))[0]
     })
     end_patch()
 
@@ -207,9 +211,9 @@ def patch_both_EU():
         0xdead0001 : 0x3412D9
     })
     # Replace call to GetBatteryLevel
-    add_function_call(0x000EF584, "src/statusbatteryicon.s", "statusbatteryicon.bin", {
-        0xdead0000 : 0x33C14C,
-        0xdead0001 : 0x3412E9
+    add_function_call(0x000EF584, "src/statusbatteryiconalt.s", "statusbatteryiconalt.bin", {
+        0xdead0001 : 0x3412E9,
+        0xe1a00000 : struct.unpack("<I", make_branch_link_diff(-280))[0]
     })
     end_patch()
 
@@ -282,3 +286,4 @@ patch_sm_home_E()
 
 os.remove("statusbattery.bin")
 os.remove("statusbatteryicon.bin")
+os.remove("statusbatteryiconalt.bin")
