@@ -13,12 +13,12 @@
 
 .arm
 _start:
-
-    stmfd sp!, {r1-r2,lr}
+    stmfd sp!, {r1-r2,r7,lr}
 
     cmp r5, 1    ; if update was forced (eg. after suspend/sleep)
     moveq r0, 0  ; force battery level update
     movne r0, 30 ; otherwise cache 30 calls - called every second
+    load r7, BatteryCachePtr
     bl getBatteryLevel
 
     cmp r0, 0
@@ -51,10 +51,13 @@ zerobat:
     mov r0, r0, lsr 2
 
 outf:
-    ldmfd sp!, {r1-r2,pc}
+    ldmfd sp!, {r1-r2,r7,pc}
 
 ; END _start
 
 .include "src/getbatterylevel.s", 0
 
+.pool
+.align 4
+    BatteryCachePtr         : .word 0xdead0001 ; free addr in data section
 .close

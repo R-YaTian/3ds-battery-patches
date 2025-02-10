@@ -20,7 +20,8 @@ _start:
 
     cmp r5, 1      ; if update was forced (eg. after suspend/sleep)
     moveq r0, 0    ; force battery level update
-    movne r0, 30   ; otherwise cache 30 calls - called every second
+    movne r0, 1    ; otherwise after one minute
+    load r7, BatteryCachePtr
     bl getBatteryLevel
 
     add r12, r12, 4
@@ -97,4 +98,5 @@ outf:
                                    "0", 0, "%", 0
     PercentSign             : .dcb "%", 0,  0 , 0
     Prefix                  : .dcb " ", 0, " ", 0
+    BatteryCachePtr         : .word 0xdead0001 ; free addr in data section
 .close

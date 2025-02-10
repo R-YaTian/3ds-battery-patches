@@ -114,7 +114,7 @@ def patch_statusbatpercent_US():
     """ Battery percent in statusbar """
     begin_patch("0004003000008F02", 0x205174, 0x206000)
     # Append battery percent to minute string
-    add_function_call(0x000EF1B8, "src/statusbattery.s", "statusbattery.bin", {
+    add_function_call(0x000EF0BC, "src/statusbattery.s", "statusbattery.bin", {
         0xdead0000 : 0x33C14C,
         0xdead0001 : 0x3412D9
     })
@@ -124,7 +124,7 @@ def patch_statusbatpercent_EU():
     """ Battery percent in statusbar """
     begin_patch("0004003000009802", 0x20560C, 0x206000)
     # Append battery percent to minute string
-    add_function_call(0x000EF4A4, "src/statusbattery.s", "statusbattery.bin", {
+    add_function_call(0x000EF3A8, "src/statusbattery.s", "statusbattery.bin", {
         0xdead0000 : 0x33C14C,
         0xdead0001 : 0x3412D9
     })
@@ -140,7 +140,7 @@ def patch_statusbaticon_JP():
     # Replace call to GetBatteryLevel
     add_function_call(0x000EF3CC, "src/statusbatteryicon.s", "statusbatteryicon.bin", {
         0xdead0000 : 0x33C14C,
-        0xdead0001 : 0x3412D9
+        0xdead0001 : 0x3412E9
     })
     end_patch()
 
@@ -150,7 +150,7 @@ def patch_statusbaticon_US():
     # Replace call to GetBatteryLevel
     add_function_call(0x000EF298, "src/statusbatteryicon.s", "statusbatteryicon.bin", {
         0xdead0000 : 0x33C14C,
-        0xdead0001 : 0x3412D9
+        0xdead0001 : 0x3412E9
     })
     end_patch()
 
@@ -160,7 +160,7 @@ def patch_statusbaticon_EU():
     # Replace call to GetBatteryLevel
     add_function_call(0x000EF584, "src/statusbatteryicon.s", "statusbatteryicon.bin", {
         0xdead0000 : 0x33C14C,
-        0xdead0001 : 0x3412D9
+        0xdead0001 : 0x3412E9
     })
     end_patch()
 
@@ -179,7 +179,7 @@ def patch_both_JP():
     # Replace call to GetBatteryLevel
     add_function_call(0x000EF3CC, "src/statusbatteryicon.s", "statusbatteryicon.bin", {
         0xdead0000 : 0x33C14C,
-        0xdead0001 : 0x3412D9
+        0xdead0001 : 0x3412E9
     })
     end_patch()
 
@@ -187,14 +187,14 @@ def patch_both_US():
     """ Battery percent in statusbar """
     begin_patch("0004003000008F02", 0x205174, 0x206000)
     # Append battery percent to minute string
-    add_function_call(0x000EF1B8, "src/statusbattery.s", "statusbattery.bin", {
+    add_function_call(0x000EF0BC, "src/statusbattery.s", "statusbattery.bin", {
         0xdead0000 : 0x33C14C,
         0xdead0001 : 0x3412D9
     })
     # Replace call to GetBatteryLevel
     add_function_call(0x000EF298, "src/statusbatteryicon.s", "statusbatteryicon.bin", {
         0xdead0000 : 0x33C14C,
-        0xdead0001 : 0x3412D9
+        0xdead0001 : 0x3412E9
     })
     end_patch()
 
@@ -202,14 +202,14 @@ def patch_both_EU():
     """ Battery percent in statusbar """
     begin_patch("0004003000009802", 0x20560C, 0x206000)
     # Append battery percent to minute string
-    add_function_call(0x000EF4A4, "src/statusbattery.s", "statusbattery.bin", {
+    add_function_call(0x000EF3A8, "src/statusbattery.s", "statusbattery.bin", {
         0xdead0000 : 0x33C14C,
         0xdead0001 : 0x3412D9
     })
     # Replace call to GetBatteryLevel
     add_function_call(0x000EF584, "src/statusbatteryicon.s", "statusbatteryicon.bin", {
         0xdead0000 : 0x33C14C,
-        0xdead0001 : 0x3412D9
+        0xdead0001 : 0x3412E9
     })
     end_patch()
 

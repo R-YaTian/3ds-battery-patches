@@ -6,8 +6,7 @@ getBatteryLevel:
 
     mov r5, r0 ; cache # calls
 
-    load r0, BatteryCachePtr
-    ldr r0, [r0]
+    ldr r0, [r7]
     mov r1, r0, lsl 16
     mov r1, r1, lsr 16 ; r1 = counter
     mov r2, r0, lsr 16 ; r2 = cached value
@@ -73,8 +72,7 @@ getBatteryLevel_err:
 getBatteryLevel_out:
     mov r4, r1
     orr r4, r4, r0, lsl 16 ; save counter and value
-    load r1, BatteryCachePtr
-    str r4, [r1]
+    str r4, [r7]
 
     ldmfd sp!, {r1-r12,pc}
 
@@ -84,4 +82,3 @@ getBatteryLevel_out:
     GetBatteryLevelCommand  : .word 0x50000
     MCUHWCServiceName       : .dcb "mcu::HWC"
     SrvHandlePtr            : .word 0xdead0000 ; "srv:" ptr
-    BatteryCachePtr         : .word 0xdead0001 ; free addr in data section
