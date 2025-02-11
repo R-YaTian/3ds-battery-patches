@@ -19,8 +19,8 @@ This patch makes the battery icon display each bar as 25% of battery charge.
 
 - Either run ``createips.py`` or ``make``
 ## Credits
-- @nowrep (Original author)
-- @LittleFIve233
-- @Trademarked69
-- @James-Makoto
-- @R-YaTian
+- nowrep (Original author)
+- LittleFIve233
+- Trademarked69
+- James-Makoto
+- R-YaTian
