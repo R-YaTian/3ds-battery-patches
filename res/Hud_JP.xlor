@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE letter-order SYSTEM "letter-order.dtd">
+
+<letter-order version="1.0">
+	<head>
+		<create user="" date="2014-12-09" />
+		<title>Hud_JP.xlor</title>
+		<comment></comment>
+	</head>
+
+	<body>
+		<area width="16" />
+		<order>
+		<sp/> &#x0020; &#x0025; &#x0028; &#x0029; &#x002c; &#x002d; &#x002e; &#x002f; &#x0030; &#x0031; &#x0032; &#x0033; &#x0034; &#x0035; &#x0036; &#x0037; &#x0038; &#x0039; &#x003a; &#x0044; &#x0045; &#x0046; &#x0047; &#x004a; &#x004c; &#x004d; &#x0051; &#x0053; &#x0054; &#x0056; &#x0057; &#x005a; &#x005f; &#x0061; &#x0062; &#x0064; &#x0065; &#x0067; &#x0068; &#x0069; &#x006a; &#x006c; &#x006d; &#x006e; &#x006f; &#x0072; &#x0073; &#x0074; &#x0075; &#x0076; &#x0078; &#x00e1; &#x00e9; &#x412; &#x41f; &#x421; &#x427; &#x431; &#x43d; &#x440; &#x441; &#x442; &#x4e00; &#x4e09; &#x4e8c; &#x4e94; &#x516d; &#x56db; &#x571f; &#x65e5; &#x6708; &#x6728; &#x6c34; &#x706b; &#x91d1;
+		</order>
+	</body>
+</letter-order>

@@ -18,3 +18,9 @@ This patch makes the battery icon display each bar as 25% of battery charge.
 - Download [armips](https://buildbot.orphis.net/armips/) ([mirror](https://www.romhacking.net/utilities/635/)) and place it next to createips.py
 
 - Either run ``createips.py`` or ``make``
+## Credits
+- @nowrep (Original author)
+- @LittleFIve233
+- @Trademarked69
+- @James-Makoto
+- @R-YaTian
