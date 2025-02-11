@@ -23,6 +23,7 @@ _start:
     movne r0, 1    ; otherwise after one minute
     load r7, BatteryCachePtr
     bl getBatteryLevel
+    mov r7, r0
 
     add r12, r12, 4
 
@@ -50,9 +51,8 @@ outloop:
     orr r6, r6, r0, lsl 16
 
     add r12, r12, 4
-    cmp r6, 10
+    cmp r7, 10
     bge append
-    load r4, Prefix
     str r4, [r12, 0x10]
     add r12, r12, 2
 append:
