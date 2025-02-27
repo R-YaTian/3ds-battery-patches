@@ -36,7 +36,7 @@ getBatteryLevel_update:
     str r0, [r11, 0x08] ; cmdbuff[2] = ":HWC"
     mov r0, 0x8
     str r0, [r11, 0x0C] ; cmdbuff[3] = 0x8
-    mov r0, 0
+    mov r0, 1
     str r0, [r11, 0x10] ; cmdbuff[4] = 0x0
 
     load r0, SrvHandlePtr
