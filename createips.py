@@ -282,21 +282,24 @@ def patch_sm_home_J():
     exheader_patched = exheader_add_service(exheader, "mcu::HWC")
     exheader_fixed = exheader_fix_code_size(exheader_patched, 0x206000)
     open(current_patch_directory() + "/exheader.bin", "wb").write(exheader_fixed)
-    copytree('romfs', os.path.join(current_patch_directory(), 'romfs'), dirs_exist_ok=True)
+    if patchname != "statusbaticon":
+        copytree('romfs', os.path.join(current_patch_directory(), 'romfs'), dirs_exist_ok=True)
 
 def patch_sm_home_U():
     exheader = bytearray(open("extheader_U.bin", "rb").read())
     exheader_patched = exheader_add_service(exheader, "mcu::HWC")
     exheader_fixed = exheader_fix_code_size(exheader_patched, 0x206000)
     open(current_patch_directory() + "/exheader.bin", "wb").write(exheader_fixed)
-    copytree('romfs', os.path.join(current_patch_directory(), 'romfs'), dirs_exist_ok=True)
+    if patchname != "statusbaticon":
+        copytree('romfs', os.path.join(current_patch_directory(), 'romfs'), dirs_exist_ok=True)
 
 def patch_sm_home_E():
     exheader = bytearray(open("extheader_E.bin", "rb").read())
     exheader_patched = exheader_add_service(exheader, "mcu::HWC")
     exheader_fixed = exheader_fix_code_size(exheader_patched, 0x206000)
     open(current_patch_directory() + "/exheader.bin", "wb").write(exheader_fixed)
-    copytree('romfs', os.path.join(current_patch_directory(), 'romfs'), dirs_exist_ok=True)
+    if patchname != "statusbaticon":
+        copytree('romfs', os.path.join(current_patch_directory(), 'romfs'), dirs_exist_ok=True)
 
 ### JPN ###
 firmver = "11.17.0-50J"

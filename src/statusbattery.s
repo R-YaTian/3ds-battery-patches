@@ -70,8 +70,10 @@ zerobat:
     str r4, [r12, 0x10]
     load r4, SMErrorMessage + 4
     str r4, [r12, 0x10 + 4]
-    mov r4, 0
+    load r4, SMErrorMessage + 8
     str r4, [r12, 0x10 + 8]
+    mov r4, 0
+    str r4, [r12, 0x10 + 12]
 
     b outf
 
@@ -93,7 +95,8 @@ outf:
 .pool
 .align 4
     SMErrorMessage          : .dcb " ", 0, "E", 0, \
-                                   "r", 0, "r", 0
+                                   "r", 0, "r", 0, \
+                                   "o", 0, "r", 0
     FullBatteryMessage      : .dcb "1", 0, "0", 0, \
                                    "0", 0, "%", 0
     PercentSign             : .dcb "%", 0,  0 , 0

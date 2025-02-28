@@ -37,15 +37,15 @@ getBatteryLevel_update:
     mov r0, 0x8
     str r0, [r11, 0x0C] ; cmdbuff[3] = 0x8
     mov r0, 1
-    str r0, [r11, 0x10] ; cmdbuff[4] = 0x0
+    str r0, [r11, 0x10] ; cmdbuff[4] = 0x1
 
     load r0, SrvHandlePtr
     ldr r0, [r0]
     _svc 0x32 ; svcSendSyncRequest(srvHandle)
     cmp r0, 0
-    blt getBatteryLevel_err
+    blt getBatteryLevel_out
 
-    ldr r9, [r11, 0x04] ; mcuhwcHandle = cmdbuff[3]
+    ; ldr r9, [r11, 0x04]
     ldr r10, [r11, 0x0C] ; mcuhwcHandle = cmdbuff[3]
 
     load r0, GetBatteryLevelCommand
@@ -70,6 +70,9 @@ getBatteryLevel_err:
     mov r0, 0
 
 getBatteryLevel_out:
+    cmp r0, 0
+    moveq r0, r2
+
     mov r4, r1
     orr r4, r4, r0, lsl 16 ; save counter and value
     str r4, [r7]
