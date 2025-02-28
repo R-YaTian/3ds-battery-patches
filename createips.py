@@ -239,7 +239,7 @@ def patch_both_JP():
     # Replace call to GetBatteryLevel
     add_function_call(0x000EF3CC, "src/statusbatteryiconalt.s", "statusbatteryiconalt.bin", {
         0xdead0001 : 0x3412E9,
-        0xe1a00000 : struct.unpack("<I", make_branch_link_diff(-280))[0]
+        0xe1a00000 : struct.unpack("<I", make_branch_link_diff(-288))[0]
     })
     end_patch()
 
@@ -254,7 +254,7 @@ def patch_both_US():
     # Replace call to GetBatteryLevel
     add_function_call(0x000EF298, "src/statusbatteryiconalt.s", "statusbatteryiconalt.bin", {
         0xdead0001 : 0x3412E9,
-        0xe1a00000 : struct.unpack("<I", make_branch_link_diff(-280))[0]
+        0xe1a00000 : struct.unpack("<I", make_branch_link_diff(-288))[0]
     })
     end_patch()
 
@@ -269,7 +269,7 @@ def patch_both_EU():
     # Replace call to GetBatteryLevel
     add_function_call(0x000EF584, "src/statusbatteryiconalt.s", "statusbatteryiconalt.bin", {
         0xdead0001 : 0x3412E9,
-        0xe1a00000 : struct.unpack("<I", make_branch_link_diff(-280))[0]
+        0xe1a00000 : struct.unpack("<I", make_branch_link_diff(-288))[0]
     })
     end_patch()
 
