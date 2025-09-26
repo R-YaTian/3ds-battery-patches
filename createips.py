@@ -280,7 +280,7 @@ def patch_both_EU():
 def patch_sm_home_J():
     exheader = bytearray(open("extheader_J.bin", "rb").read())
     exheader_patched = exheader_add_service(exheader, "mcu::HWC")
-    exheader_fixed = exheader_fix_code_size(exheader_patched, 0x206000)
+    exheader_fixed = exheader_fix_code_size(exheader_patched, text_end)
     open(current_patch_directory() + "/exheader.bin", "wb").write(exheader_fixed)
     if patchname != "statusbaticon":
         copytree('romfs', os.path.join(current_patch_directory(), 'romfs'), dirs_exist_ok=True)
@@ -288,7 +288,7 @@ def patch_sm_home_J():
 def patch_sm_home_U():
     exheader = bytearray(open("extheader_U.bin", "rb").read())
     exheader_patched = exheader_add_service(exheader, "mcu::HWC")
-    exheader_fixed = exheader_fix_code_size(exheader_patched, 0x206000)
+    exheader_fixed = exheader_fix_code_size(exheader_patched, text_end)
     open(current_patch_directory() + "/exheader.bin", "wb").write(exheader_fixed)
     if patchname != "statusbaticon":
         copytree('romfs', os.path.join(current_patch_directory(), 'romfs'), dirs_exist_ok=True)
@@ -296,7 +296,7 @@ def patch_sm_home_U():
 def patch_sm_home_E():
     exheader = bytearray(open("extheader_E.bin", "rb").read())
     exheader_patched = exheader_add_service(exheader, "mcu::HWC")
-    exheader_fixed = exheader_fix_code_size(exheader_patched, 0x206000)
+    exheader_fixed = exheader_fix_code_size(exheader_patched, text_end)
     open(current_patch_directory() + "/exheader.bin", "wb").write(exheader_fixed)
     if patchname != "statusbaticon":
         copytree('romfs', os.path.join(current_patch_directory(), 'romfs'), dirs_exist_ok=True)
